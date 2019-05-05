@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "com.pwr.zsbd.experiments")
@@ -39,15 +40,30 @@ public class App {
         log.info("Starting application");
 
         try {
-            domExperiment.startMeasurement();
-            domExperiment.startMeasurement();
+//            domExperiment.startMeasurement();
+//            domExperiment.startMeasurement();
+            IntStream.rangeClosed(1, 10).forEach(i -> {
+                try {
+                    domExperiment.startMeasurement();
+                } catch (IOException | SAXException e) {
+                    e.printStackTrace();
+                }
+            });
+
             log.info("DOM TIMES[ms]: " + domExperiment.getTimes());
 
-            saxExperiment.startMeasurement();
-            saxExperiment.startMeasurement();
+//            saxExperiment.startMeasurement();
+//            saxExperiment.startMeasurement();
+            IntStream.rangeClosed(1, 10).forEach(i -> {
+                try {
+                    saxExperiment.startMeasurement();
+                } catch (IOException | SAXException e) {
+                    e.printStackTrace();
+                }
+            });
             log.info("SAX TIMES[ms]: " + saxExperiment.getTimes());
 
-        } catch (IOException | SAXException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
