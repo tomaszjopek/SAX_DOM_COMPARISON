@@ -29,4 +29,12 @@ public class InventoryDAO {
         return jdbcTemplate.query(query, (resultSet, i) -> resultSet.getString(1));
     }
 
+    public void clearBufferCache() {
+        jdbcTemplate.execute("alter system flush buffer_cache");
+    }
+
+    public void clearSharedPool() {
+        jdbcTemplate.execute("ALTER SYSTEM FLUSH SHARED_POOL");
+    }
+
 }

@@ -8,9 +8,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.xml.sax.SAXException;
 
 import javax.sql.DataSource;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.*;
 
 @Configuration
 @ComponentScan(basePackages = "com.pwr.zsbd.experiments")
@@ -33,6 +31,16 @@ public class Config {
     @Bean
     public SAXParser saxParser() throws ParserConfigurationException, SAXException {
         return SAXParserFactory.newInstance().newSAXParser();
+    }
+
+    @Bean
+    public DocumentBuilderFactory documentBuilderFactory() {
+        return DocumentBuilderFactory.newInstance();
+    }
+
+    @Bean
+    public DocumentBuilder documentBuilder() throws ParserConfigurationException {
+        return documentBuilderFactory().newDocumentBuilder();
     }
 
 }

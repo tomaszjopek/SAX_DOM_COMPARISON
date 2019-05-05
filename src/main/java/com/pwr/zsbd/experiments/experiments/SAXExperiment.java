@@ -2,6 +2,7 @@ package com.pwr.zsbd.experiments.experiments;
 
 import com.pwr.zsbd.experiments.dao.InventoryDAO;
 import com.pwr.zsbd.experiments.handlers.InventoryHandler;
+import com.pwr.zsbd.experiments.model.Inventory;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class SAXExperiment {
+public class SAXExperiment implements Experiment {
 
     private final InventoryDAO inventoryDAO;
     private final SAXParser saxParser;
@@ -34,11 +35,15 @@ public class SAXExperiment {
     }
 
     public void startMeasurement() throws IOException, SAXException {
+        inventoryDAO.clearBufferCache();
+        inventoryDAO.clearSharedPool();
+
         log.info("Starting time measurement in SAX Experiment");
         long startTime = System.currentTimeMillis();
         List<String> resultSet = inventoryDAO.loadXML();
         String xml = resultSet.get(0);
 
+        // parsing
         InputStream inputStream = new ByteArrayInputStream(xml.getBytes());
         saxParser.parse(inputStream, inventoryHandler);
         long endTime = System.currentTimeMillis();
@@ -47,4 +52,5 @@ public class SAXExperiment {
         log.info("TOTAL INVENTORIES PROCESSED FROM XML: " + inventoryHandler.getInventories().size());
         log.info("TIME ELAPSED: " + (endTime - startTime) + " [ms]");
     }
+
 }

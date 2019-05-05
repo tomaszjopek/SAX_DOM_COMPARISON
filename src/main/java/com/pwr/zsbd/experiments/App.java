@@ -1,5 +1,6 @@
 package com.pwr.zsbd.experiments;
 
+import com.pwr.zsbd.experiments.experiments.DOMExperiment;
 import com.pwr.zsbd.experiments.experiments.SAXExperiment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,14 @@ import java.io.IOException;
 @Slf4j
 public class App {
 
+    private final SAXExperiment saxExperiment;
+    private final DOMExperiment domExperiment;
+
     @Autowired
-    private SAXExperiment saxExperiment;
+    public App(SAXExperiment saxExperiment, DOMExperiment domExperiment) {
+        this.saxExperiment = saxExperiment;
+        this.domExperiment = domExperiment;
+    }
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(App.class);
@@ -32,9 +39,14 @@ public class App {
         log.info("Starting application");
 
         try {
+            domExperiment.startMeasurement();
+            domExperiment.startMeasurement();
+            log.info("DOM TIMES[ms]: " + domExperiment.getTimes());
+
             saxExperiment.startMeasurement();
             saxExperiment.startMeasurement();
             log.info("SAX TIMES[ms]: " + saxExperiment.getTimes());
+
         } catch (IOException | SAXException e) {
             e.printStackTrace();
         }
